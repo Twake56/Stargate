@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stargate</title>
+</head>
+<body>
+  <h1 id="title">STARGATE</h1>
+  <br />
+  <br />
+  <h2>Astronaut Career Tracking System</h2>
+  <div class="search-content">
+
+    <input type="text" class="search-bar" name="getAstronautDuties" [(ngModel)]="astronautName" placeholder="Enter Astronaut Name" />
+    <br />
+
+    <button type="button" class="search-button" (click)="getAstronautDuties(astronautName)">Get Astronaut Duties</button>
+    <br />
+    <br />
+    <div *ngIf="astronautPerson.name" class="astronaut-results">
+      <span id="astronaut-name"><b>Astronaut:</b> {{astronautPerson.name}}</span>
+      <br />
+      <br />
+      <table>
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Title</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let duty of astronautDuties">
+            <td>{{ duty.rank }}</td>
+            <td>{{ duty.dutyTitle }}</td>
+            <td>{{ duty.dutyStartDate }}</td>
+            <td>{{ duty.dutyEndDate }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>
