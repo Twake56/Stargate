@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Stargate.Server/starbase.db-shm
+/Stargate.Server/starbase.db-wal
+/Stargate.Server/starbase.db
