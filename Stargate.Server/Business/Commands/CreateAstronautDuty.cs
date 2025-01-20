@@ -54,6 +54,15 @@ namespace Stargate.Server.Business.Commands
 
             var person = await _context.People.FromSql($"SELECT * FROM [Person] WHERE Name = {request.Name}").FirstOrDefaultAsync();
 
+            if (person is null)
+            {
+                return new CreateAstronautDutyResult
+                {
+                    Success = false,
+                    Message = "Person was not found"
+                };
+            }
+
             var astronautDetail = await _context.AstronautDetails.FromSql($"SELECT * FROM [AstronautDetail] WHERE {person?.Id} = PersonId").FirstOrDefaultAsync();
 
             if (astronautDetail == null)
@@ -77,16 +86,16 @@ namespace Stargate.Server.Business.Commands
                 astronautDetail.CurrentRank = request.Rank;
                 if (request.DutyTitle == "RETIRED")
                 {
-                    astronautDetail.CareerEndDate = request.DutyStartDate.AddDays(-1).Date;
+                    astronautDetail.CareerEndDate = request.DutyStartDate > DateTime.MinValue ? request.DutyStartDate.AddDays(-1).Date : DateTime.MinValue;
                 }
                 _context.AstronautDetails.Update(astronautDetail);
             }
 
-            var astronautDuty = await _context.AstronautDuties.FromSql($"SELECT * FROM [AstronautDuty] WHERE \'{person.Id}\' = PersonId Order By DutyStartDate Desc").FirstOrDefaultAsync();
+            var astronautDuty = await _context.AstronautDuties.FromSql($"SELECT * FROM [AstronautDuty] WHERE {person.Id} = PersonId Order By DutyStartDate Desc").FirstOrDefaultAsync();
 
             if (astronautDuty != null)
             {
-                astronautDuty.DutyEndDate = request.DutyStartDate.AddDays(-1).Date;
+                astronautDuty.DutyEndDate = request.DutyStartDate > DateTime.MinValue ?  request.DutyStartDate.AddDays(-1).Date : DateTime.MinValue;
                 _context.AstronautDuties.Update(astronautDuty);
             }
 

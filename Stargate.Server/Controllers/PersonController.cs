@@ -18,8 +18,7 @@ namespace Stargate.Server.Controllers
 
         [HttpGet("")]
         public async Task<IActionResult> GetPeople()
-        {
-            
+        {            
             try
             {
                 var result = await _mediator.Send(new GetPeople()

@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { HttpEventType } from '@angular/common/http';
+import { Component } from '@angular/core';
 import { ApiService } from './api.service';
-import { AstronautDuty, Person, PersonDutyResponse } from './app-interfaces';
+import { AstronautDuty, Person } from './app-interfaces';
 
 @Component({
   selector: 'app-root',
@@ -10,42 +10,45 @@ import { AstronautDuty, Person, PersonDutyResponse } from './app-interfaces';
 })
 export class AppComponent {
 
-  personName = '';
-
-  people = [];
-
   astronautDuties: AstronautDuty[] = [];
 
   astronautPerson: Partial<Person> = {};
 
   astronautName = '';
 
+  progress: number = 0;
+
+  errorMessage: string = '';
 
   constructor(private apiService: ApiService) { }
 
-  addPerson() {
-    this.apiService.addPerson(this.personName).subscribe({
-      error: (err) => { console.log(err) },
-      complete: () => { console.log("Success adding person") }
-    });
-  }
-
-  getPeople() {
-    this.apiService.getPeople().subscribe({
-      error: (err) => { console.log(err) },
-      complete: () => { console.log("Success getting people") }
-    });
-  }
-
   getAstronautDuties(name: string) {
-    this.apiService.getAstronautDuties(name).subscribe( {
-      next: (response) => {
-        this.astronautDuties = response.astronautDuties;
-        this.astronautPerson = response.person;
+    this.apiService.getAstronautDuties(name).subscribe({
+      next: (event) => {
+        if (event.type === HttpEventType.DownloadProgress) {
+          if (event.total) {
+            this.progress = Math.round(100 * event.loaded / event.total);
+          }
+        }
+        else if (event.type === HttpEventType.Response) {
+          if (!event.body.success) {
+            this.errorMessage = event.body.message;
+            this.astronautPerson.name = '';
+          }
+          else {
+            this.errorMessage = '';
+            this.astronautDuties = event.body.astronautDuties;
+            this.astronautPerson = event.body.person;
+          }
+          this.progress = 100;
+        }
       },
-      error: (err) => { console.log(err) },
-      complete: () => { console.log("Success getting people") }
+      error: (err) => {
+        console.log(err);
+        this.progress = 0;
+        this.errorMessage = 'Error occurred getting astronaut duties'
+      },
+      complete: () => { console.log("Success getting astronaut duties"); }
     });
   }
-  
 }

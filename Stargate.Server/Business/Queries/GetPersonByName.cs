@@ -23,9 +23,17 @@ namespace Stargate.Server.Business.Queries
         {
             var result = new GetPersonByNameResult();
 
-            var person = await _context.PersonAstronauts.FromSql($"SELECT a.Id as PersonId, a.Name, b.CurrentRank, b.CurrentDutyTitle, b.CareerStartDate, b.CareerEndDate FROM [Person] a LEFT JOIN [AstronautDetail] b on b.PersonId = a.Id WHERE {request.Name} = a.Name").FirstOrDefaultAsync();
+            var person = await _context.PersonAstronauts.FromSql($"SELECT a.Id as PersonId, a.Name, b.CurrentRank, b.CurrentDutyTitle, b.CareerStartDate, b.CareerEndDate, b.Id FROM [Person] a LEFT JOIN [AstronautDetail] b on b.PersonId = a.Id WHERE LOWER({request.Name}) = LOWER(a.Name)").FirstOrDefaultAsync();
 
-            result.Person = person;
+            if (person is null)
+            {
+                result.Success = false;
+                result.Message = "Person not found";
+            }
+            else
+            {
+                result.Person = person;
+            }
 
             return result;
         }

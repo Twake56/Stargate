@@ -22,16 +22,22 @@ namespace Stargate.Server.Business.Queries
 
         public async Task<GetAstronautDutiesByNameResult> Handle(GetAstronautDutiesByName request, CancellationToken cancellationToken)
         {
-
             var result = new GetAstronautDutiesByNameResult();
 
-            var person = await _context.PersonAstronauts.FromSql($"SELECT a.Id as PersonId, a.Name, b.CurrentRank, b.CurrentDutyTitle, b.CareerStartDate, b.CareerEndDate FROM [Person] a LEFT JOIN [AstronautDetail] b on b.PersonId = a.Id WHERE {request.Name} = a.Name").FirstOrDefaultAsync();
+            var person = await _context.PersonAstronauts.FromSql($"SELECT a.Id as PersonId, a.Name, b.CurrentRank, b.CurrentDutyTitle, b.CareerStartDate, b.CareerEndDate, b.Id FROM [Person] AS a LEFT JOIN [AstronautDetail] AS b on b.PersonId = a.Id WHERE LOWER({request.Name}) = LOWER(a.Name)").FirstOrDefaultAsync();
 
+            if (person is null)
+            {
+                result.Success = false;
+                result.Message = "Astronaut not found";
+                return result;
+            }
             result.Person = person;
 
             var duties = await _context.AstronautDuties.FromSql($"SELECT * FROM [AstronautDuty] WHERE {person.PersonId} = PersonId Order By DutyStartDate Desc").ToListAsync();
 
             result.AstronautDuties = duties;
+            
 
             return result;
 

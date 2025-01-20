@@ -12,8 +12,12 @@
 
     <input type="text" class="search-bar" name="getAstronautDuties" [(ngModel)]="astronautName" placeholder="Enter Astronaut Name" />
     <br />
-
-    <button type="button" class="search-button" (click)="getAstronautDuties(astronautName)">Get Astronaut Duties</button>
+    <div>
+      <button type="button" class="search-button" (click)="getAstronautDuties(astronautName)">Get Astronaut Duties</button>
+      <span *ngIf="progress > 0" class="text">{{ progress }}%</span>
+    </div>
+    <br />
+    <span class="text" *ngIf="errorMessage">{{ errorMessage }}</span>
     <br />
     <br />
     <div *ngIf="astronautPerson.name" class="astronaut-results">
@@ -33,8 +37,8 @@
           <tr *ngFor="let duty of astronautDuties">
             <td>{{ duty.rank }}</td>
             <td>{{ duty.dutyTitle }}</td>
-            <td>{{ duty.dutyStartDate }}</td>
-            <td>{{ duty.dutyEndDate }}</td>
+            <td>{{ duty.dutyStartDate | date:'mediumDate' }}</td>
+            <td>{{ duty.dutyEndDate | date:'mediumDate'}}</td>
           </tr>
         </tbody>
       </table>

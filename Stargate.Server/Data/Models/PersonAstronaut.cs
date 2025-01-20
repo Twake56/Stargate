@@ -3,9 +3,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Stargate.Server.Data.Models
 {
-    [Keyless]
+    
     public class PersonAstronaut
     {
+        public int Id{ get; set; }
         public int PersonId { get; set; }
 
         public string Name { get; set; } = string.Empty;
@@ -25,7 +26,7 @@ namespace Stargate.Server.Data.Models
     {
         public void Configure(EntityTypeBuilder<PersonAstronaut> builder)
         {
-            builder.HasNoKey();
+            builder.HasKey(x => x.Id);
         }
     }
 }

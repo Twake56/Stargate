@@ -1,0 +1,76 @@
+.search-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  flex-direction: column;
+}
+
+.search-bar {
+  width: 40%;
+  height: 40px;
+  border-radius: 20px;
+  padding-left: 10px;
+  opacity: 85%;
+  font-size: 16pt;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.search-button {
+  border-radius: 20px;
+  font-family: 'Orbitron', sans-serif;
+  height: 45px;
+  font-weight: bold;
+  font-size: 14pt;
+  padding-left: 15px;
+  padding-right: 15px;
+  background-color: aliceblue;
+}
+
+body {
+  font-family: 'Orbitron', sans-serif;
+}
+
+.astronaut-results {
+  background-color: black;
+  color: aliceblue;
+  padding: 15px;
+  border-radius: 15px;
+}
+
+table, td {
+  border: 1px solid white;
+  border-collapse: collapse;
+  padding: 8px;
+  font-size: 14pt;
+  text-align: center;
+}
+
+th {
+  border: 1px solid white;
+  border-collapse: collapse;
+  padding: 8px;
+  font-weight: bold;
+  font-size: 16pt;
+}
+
+#astronaut-name {
+  font-size: 16pt;
+  justify-self: center;
+}
+
+h1 {
+  color: aliceblue;
+  font-size: 22pt;
+}
+
+h2 {
+  color: aliceblue;
+  font-size: 26pt;
+  text-align: center;
+}
+
+.text {
+  color: white;
+  margin-left: 15px;
+}
