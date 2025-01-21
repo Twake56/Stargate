@@ -29,7 +29,7 @@ namespace Stargate.Server.Business.Commands
 
         public Task Process(CreateAstronautDuty request, CancellationToken cancellationToken)
         {
-            var person = _context.People.AsNoTracking().FirstOrDefault(z => z.Name == request.Name);
+            var person = _context.People.AsNoTracking().FirstOrDefault(z => z.Name.ToLower() == request.Name.ToLower());
             
             if (person is null) throw new BadHttpRequestException("Bad Request");
 
@@ -52,7 +52,7 @@ namespace Stargate.Server.Business.Commands
         public async Task<CreateAstronautDutyResult> Handle(CreateAstronautDuty request, CancellationToken cancellationToken)
         {
 
-            var person = await _context.People.FromSql($"SELECT * FROM [Person] WHERE Name = {request.Name}").FirstOrDefaultAsync();
+            var person = await _context.People.FromSql($"SELECT * FROM [Person] WHERE LOWER(Name) = LOWER({request.Name})").FirstOrDefaultAsync();
 
             if (person is null)
             {

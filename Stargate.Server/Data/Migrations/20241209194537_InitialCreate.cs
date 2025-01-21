@@ -94,7 +94,7 @@ namespace Stargate.Server.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_AstronautDuty_PersonId",
                 table: "AstronautDuty",
-                column: "PersonId");
+                column: "PersonId");     
         }
 
         /// <inheritdoc />

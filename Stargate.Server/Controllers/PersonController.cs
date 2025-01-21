@@ -11,9 +11,13 @@ namespace Stargate.Server.Controllers
     public class PersonController : ControllerBase
     {
         private readonly IMediator _mediator;
-        public PersonController(IMediator mediator)
+
+        private readonly ILogger _logger;
+
+        public PersonController(IMediator mediator, ILogger<PersonController> logger)
         {
             _mediator = mediator;
+            _logger = logger;
         }
 
         [HttpGet("")]
@@ -25,11 +29,13 @@ namespace Stargate.Server.Controllers
                 {
 
                 });
-
+                _logger.LogInformation($"Get people : {result.People.Select(x => x.Name)} ");
                 return this.GetResponse(result);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error occurred getting people");
+
                 return this.GetResponse(new BaseResponse()
                 {
                     Message = ex.Message,
@@ -48,11 +54,13 @@ namespace Stargate.Server.Controllers
                 {
                     Name = name
                 });
-
+                _logger.LogInformation($"Get person by name: {result.Person.Name} ");
                 return this.GetResponse(result);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error occurred getting person by name");
+
                 return this.GetResponse(new BaseResponse()
                 {
                     Message = ex.Message,
@@ -71,11 +79,13 @@ namespace Stargate.Server.Controllers
                 {
                     Name = name
                 });
-
+                _logger.LogInformation($"Created person: {result.Id}");
                 return this.GetResponse(result);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error occurred creating person");
+
                 return this.GetResponse(new BaseResponse()
                 {
                     Message = ex.Message,

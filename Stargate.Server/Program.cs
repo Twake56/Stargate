@@ -24,6 +24,13 @@ builder.Services.AddMediatR(cfg =>
     cfg.AddRequestPreProcessor<CreateAstronautDutyPreProcessor>();
     cfg.RegisterServicesFromAssemblies(typeof(Program).Assembly);
 });
+
+builder.Services.AddSingleton<ILoggerProvider, SQLiteLoggerProvider>();
+builder.Services.Configure<SQLiteLoggerConfiguration>(config =>
+{
+    config.LogLevel = LogLevel.Information;
+});
+
 var app = builder.Build();
 app.UseDefaultFiles();
 using (var scope = app.Services.CreateScope())
